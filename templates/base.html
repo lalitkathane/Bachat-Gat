@@ -1,0 +1,78 @@
+<!-- templates/base.html - Base template with navigation -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t.app }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: white; color: #121212; }
+        body.dark { background-color: #121212; color: white; }
+        .card { border-color: #dee2e6; }
+        .dark .card { border-color: #333; }
+        .dark .border { border-color: #333 !important; }
+        .dark .text-muted { color: #aaa !important; }
+        .dark .bg-light { background-color: #222 !important; }
+        /* Add more custom CSS as needed for dark mode */
+    </style>
+</head>
+<body class="{% if theme_dark %}dark{% endif %}">
+    {% if role %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light {% if theme_dark %}bg-dark navbar-dark{% endif %} sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">{{ t.app }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">{{ t.dashboard }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('savings_page') }}">{{ t.savingsLedger }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('loans_page') }}">{{ t.loans }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('history') }}">{{ t.historyReports }}</a></li>
+                    {% if role != 'member' %}<li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">{{ t.adminPanel }}</a></li>{% endif %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('settings') }}">{{ t.settings }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('help_page') }}">{{ t.help }}</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown">{{ t.language }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='en') }}">English</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='hi') }}">हिंदी</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='mr') }}">मराठी</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('toggle_theme') }}">{{ t.theme }}: {% if theme_dark %}{{ t.dark }}{% else %}{{ t.light }}{% endif %}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">{{ t.notifications }} {% if notifications|selectattr('unread')|list|length > 0 %}({{ notifications|selectattr('unread')|list|length }}){% endif %}</a>
+                        <ul class="dropdown-menu">
+                            {% for n in notifications %}
+                            <li><a class="dropdown-item" href="{{ url_for('mark_read', notif_id=n.id) }}">{{ n.text }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="roleDropdown" role="button" data-bs-toggle="dropdown">{{ t.role }}: {{ t[role] }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('change_role', role='member') }}">{{ t.member }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('change_role', role='admin') }}">{{ t.admin }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('change_role', role='super') }}">{{ t.superAdmin }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t.logout }}</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="container my-4">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

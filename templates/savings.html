@@ -1,0 +1,40 @@
+<!-- templates/savings.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ t.savingsLedger }}</h2>
+<div class="card mb-4">
+    <div class="card-header">{{ t.addSavings }}</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Member</label>
+                    <select name="member_id" class="form-select">
+                        {% for m in members %}
+                        <option value="{{ m.id }}">{{ m.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Amount (₹)</label>
+                    <input type="number" name="amount" class="form-control" value="500">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">Ledger</div>
+    <ul class="list-group list-group-flush">
+        {% for s in savings %}
+        <li class="list-group-item">
+            {{ (members|selectattr('id', 'equalto', s.memberId)|first).name }} - {{ s.date }} - ₹{{ s.amount }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

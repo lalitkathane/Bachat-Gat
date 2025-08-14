@@ -1,0 +1,46 @@
+<!-- templates/history.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ t.historyReports }}</h2>
+<ul class="nav nav-tabs">
+    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#transactions">Transactions</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#audit">Audit Log</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports">Reports</a></li>
+</ul>
+<div class="tab-content mt-3">
+    <div class="tab-pane active" id="transactions">
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for s in savings %}
+                <li class="list-group-item">
+                    Savings - {{ (members|selectattr('id', 'equalto', s.memberId)|first).name }} - {{ s.date }} - ₹{{ s.amount }}
+                </li>
+                {% endfor %}
+                {% for l in loans %}
+                <li class="list-group-item">
+                    Loan - {{ (members|selectattr('id', 'equalto', l.memberId)|first).name }} - {{ l.status }} - ₹{{ l.amount }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="tab-pane" id="audit">
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for a in audit %}
+                <li class="list-group-item">{{ a.action }} - {{ a.by }} - {{ a.ts }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="tab-pane" id="reports">
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ url_for('export', kind='pdf') }}" class="btn btn-secondary">PDF</a>
+                <a href="{{ url_for('export', kind='excel') }}" class="btn btn-primary">Excel</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

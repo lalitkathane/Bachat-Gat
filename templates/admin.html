@@ -1,0 +1,60 @@
+<!-- templates/admin.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ t.adminPanel }}</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Group Members</div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="text" name="phone" class="form-control">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </form>
+                <hr>
+                <ul class="list-group">
+                    {% for m in members %}
+                    <li class="list-group-item">{{ m.name }} - {{ m.phone }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Role & Access</div>
+            <div class="card-body">
+                <div class="btn-group">
+                    <a href="{{ url_for('change_role', role='member') }}" class="btn btn-outline-primary {% if role == 'member' %}active{% endif %}">Member</a>
+                    <a href="{{ url_for('change_role', role='admin') }}" class="btn btn-outline-primary {% if role == 'admin' %}active{% endif %}">Admin</a>
+                    <a href="{{ url_for('change_role', role='super') }}" class="btn btn-outline-primary {% if role == 'super' %}active{% endif %}">Super Admin</a>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-4">Groups: {{ num_groups }}</div>
+                    <div class="col-4">Members: {{ num_members }}</div>
+                    <div class="col-4">Active Loans: {{ active_loans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mt-4">
+    <div class="card-header">Audit Log</div>
+    <ul class="list-group list-group-flush">
+        {% for a in audit %}
+        <li class="list-group-item">{{ a.action }} - {{ a.by }} - {{ a.ts }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

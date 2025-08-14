@@ -1,0 +1,15 @@
+<!-- templates/help.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ t.help }}</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="mb-3">
+            <strong>How to Add Savings</strong>
+            <p>Go to {{ t.savingsLedger }} → fill member and amount → Save.</p>
+        </div>
+        <!-- Add other help sections similarly -->
+    </div>
+</div>
+{% endblock %}
