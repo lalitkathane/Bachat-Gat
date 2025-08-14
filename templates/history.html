@@ -2,41 +2,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ t.historyReports }}</h2>
-<ul class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#transactions">Transactions</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#audit">Audit Log</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports">Reports</a></li>
+<h2 class="text-muted">{{ t.historyReports }}</h2>
+<ul class="nav nav-pills">
+    <li class="nav-item"><a class="nav-link active rounded-pill bg-light" data-bs-toggle="tab" href="#transactions">Transactions</a></li>
+    <li class="nav-item"><a class="nav-link rounded-pill bg-light" data-bs-toggle="tab" href="#audit">Audit Log</a></li>
+    <li class="nav-item"><a class="nav-link rounded-pill bg-light" data-bs-toggle="tab" href="#reports">Reports</a></li>
 </ul>
 <div class="tab-content mt-3">
     <div class="tab-pane active" id="transactions">
-        <div class="card">
-            <ul class="list-group list-group-flush">
-                {% for s in savings %}
-                <li class="list-group-item">
-                    Savings - {{ (members|selectattr('id', 'equalto', s.memberId)|first).name }} - {{ s.date }} - ₹{{ s.amount }}
-                </li>
-                {% endfor %}
-                {% for l in loans %}
-                <li class="list-group-item">
-                    Loan - {{ (members|selectattr('id', 'equalto', l.memberId)|first).name }} - {{ l.status }} - ₹{{ l.amount }}
-                </li>
-                {% endfor %}
-            </ul>
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body">
+                <h6 class="text-muted">Transactions</h6>
+                <ul class="list-group list-group-flush">
+                    {% for s in savings %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+                        Savings
+                        <span>{{ (members|selectattr('id', 'equalto', s.memberId)|first).name }}</span>
+                        <span class="text-muted">{{ s.date }}</span>
+                        <span>₹{{ s.amount }}</span>
+                    </li>
+                    {% endfor %}
+                    {% for l in loans %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+                        Loan
+                        <span>{{ (members|selectattr('id', 'equalto', l.memberId)|first).name }}</span>
+                        <span class="text-muted">{{ l.status }}</span>
+                        <span>₹{{ l.amount }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="audit">
-        <div class="card">
-            <ul class="list-group list-group-flush">
-                {% for a in audit %}
-                <li class="list-group-item">{{ a.action }} - {{ a.by }} - {{ a.ts }}</li>
-                {% endfor %}
-            </ul>
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body">
+                <h6 class="text-muted">Audit Log</h6>
+                <ul class="list-group list-group-flush">
+                    {% for a in audit %}
+                    <li class="list-group-item border-0 px-0 py-2">
+                        {{ a.action }} - {{ a.by }} - {{ a.ts }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="reports">
-        <div class="card">
+        <div class="card border-0 shadow-sm rounded-3">
             <div class="card-body">
+                <h6 class="text-muted">Reports</h6>
                 <a href="{{ url_for('export', kind='pdf') }}" class="btn btn-secondary">PDF</a>
                 <a href="{{ url_for('export', kind='excel') }}" class="btn btn-primary">Excel</a>
             </div>

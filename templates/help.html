@@ -2,14 +2,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ t.help }}</h2>
-<div class="card">
+<h2 class="text-muted">{{ t.help }}</h2>
+<div class="card border-0 shadow-sm rounded-3">
     <div class="card-body">
-        <div class="mb-3">
-            <strong>How to Add Savings</strong>
-            <p>Go to {{ t.savingsLedger }} → fill member and amount → Save.</p>
-        </div>
-        <!-- Add other help sections similarly -->
+        <h6 class="text-muted">Help & Support</h6>
+        <p class="mt-4">How to Add Savings</p>
+        <p class="text-muted">Go to Savings Ledger → fill member and amount → Save.</p>
+        <p>How to Loan Approval Works</p>
+        <p class="text-muted">Member requests → Admin approves → EMI generated → repay via Stripe.</p>
+        <p>How to Repay Loan</p>
+        <p class="text-muted">Go to Loan Management → click Pay Now on a pending EMI → confirm payment.</p>
+        <p>Forgot Login Help</p>
+        <p class="text-muted">Use email-based password reset or contact your Admin.</p>
     </div>
 </div>
 {% endblock %}
